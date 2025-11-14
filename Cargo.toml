@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 nom = "8"
 serde = { version = "1", features = ["derive"] }
+encoding_rs = "0.8"

@@ -1,8 +1,9 @@
 use std::io;
 use std::io::prelude::*;
 use std::fs::File;
+use std::fmt;
 use serde::{Serialize, Deserialize};
-
+use encoding_rs::SHIFT_JIS;
 use nom::{
     bytes::complete::take,
     number::complete::le_u32,
@@ -11,10 +12,20 @@ use nom::{
     Parser,
 };
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Default, Clone, Serialize, Deserialize)]
 struct StdString {
     length: u32,
     data: Vec<u8>,
+}
+
+impl fmt::Debug for StdString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let (cow, _, _) = SHIFT_JIS.decode(&self.data);
+        f.debug_struct("StdString")
+            .field("length", &self.length)
+            .field("data", &cow)
+            .finish()
+    }
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
